@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-// import { CSSTransition, TransitionGroup } from 'react-transition-group';
-// import { Link } from "react-router-dom";
+import React, { useState, useRef } from "react";
+import Slider from "react-slick";
 import questions from "../objects/questions";
 import plans from "../objects/plans";
 import planMapping from "../objects/planMapping";
 import TotalResult from "./TotalResult";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 function Top() {
   const [currentQindex, setCurrentQindex] = useState(0);
@@ -12,10 +13,13 @@ function Top() {
   const [filteredData, setFilteredData] = useState([]);
   const [planTable, setPlanTable] = useState([]);
   const [callPack, setCallPack] = useState([]);
+  const sliderRef = useRef(null);
   const currentQ = questions[currentQindex];
   //前の設問に戻る
   const goBack = () => {
     if (currentQindex > 0) {
+      //スライダー
+      sliderRef.current.slickPrev()
       //直前の質問のインデックスを取得
       const prevQindex = answers[answers.length - 1].questionIndex;
       setCurrentQindex(prevQindex);
@@ -30,8 +34,10 @@ function Top() {
     const answer = { questionIndex: currentQindex, answerIndex: option };
     const updatedAnswers = [...answers, answer];
     setAnswers(updatedAnswers); //回答を記録
+    //スライダー
+    sliderRef.current.slickNext();
+    ////// 通話定額を使うかどうか //////
     if (currentQindex === callPackQindex) {
-      ////// 通話定額を使うかどうか //////
       // 通話定額を使うかの回答を取得
       setCallPack([]);
       const callPackage = updatedAnswers.find(
@@ -138,21 +144,35 @@ function Top() {
       setCurrentQindex(nextQindex);
     }
   };
-
+  //slider
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrow: false,
+  };
   return (
     <div>
-      <h2>{currentQ.question}</h2>
-      <ul>
-        {currentQ.options.map((option, index) => (
-          <li
-            key={index}
-            className="answer"
-            onClick={() => handleAnswerSelection(index)}
-          >
-            {option}
-          </li>
-        ))}
-      </ul>
+      <Slider ref={sliderRef} {...settings}>
+        {questions &&
+          questions.map((item) => (
+            <div>
+              <h2>{currentQ.question}</h2>
+              {currentQ &&
+                currentQ.options.map((option, index) => (
+                  <div
+                    key={index}
+                    className="answer"
+                    onClick={() => handleAnswerSelection(index)}
+                  >
+                    {option}
+                  </div>
+                ))}
+            </div>
+          ))}
+      </Slider>
       <button className="backBtn disabled" onClick={goBack}>
         前の設問に戻る
       </button>

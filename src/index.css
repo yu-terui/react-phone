@@ -23,7 +23,8 @@ dt,dd{
   padding: 0;
   margin: 0;
 }
-/* TOP */
+
+/* トップ */
 .container {
   width: 960px;
   text-align: center;
@@ -80,7 +81,8 @@ header h1 span:last-child {
   border: 2px solid darkgoldenrod;
   border-radius: 25px;
 }
-/* TotalReuslt */
+
+/* 診断結果 */
 #TotalResult{
   background:darkgoldenrod;
   color: white;
@@ -121,3 +123,4 @@ header h1 span:last-child {
 #TotalResult .open{
   display: block;
 }
+
