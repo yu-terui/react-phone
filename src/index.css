@@ -1,0 +1,123 @@
+/* reset */
+body{
+  color: #333;
+}
+p,h1,h2,h3,ul,li{
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
+a{
+  color: #333;
+}
+a:hover{
+  text-decoration: none;
+  color: #333;
+}
+li{
+  list-style-type: none;
+}
+dt,dd{
+  display: inline-block;
+  font-weight: normal;
+  padding: 0;
+  margin: 0;
+}
+/* TOP */
+.container {
+  width: 960px;
+  text-align: center;
+  padding: 20px 0;
+  margin: auto;
+}
+@media screen and (max-width: 768px) {
+  .container {
+    width: 90%;
+  }
+}
+h1 {
+  color: saddlebrown;
+  padding: 10px;
+}
+h2{
+  padding: 10px;
+}
+header h1 span:first-child {
+  color:salmon;
+}
+header h1 span:nth-child(2) {
+  color: palevioletred;
+}
+header h1 span:nth-child(3) {
+  color: dodgerblue;
+}
+header h1 span:last-child {
+  color: lightseagreen;
+}
+.answer{
+  display: inline-block;
+  margin: 20px;
+  width: 200px;
+  height: 200px;
+  line-height: 200px;
+  font-size: 120%;
+  text-align: center;
+  vertical-align: middle;
+  background:gainsboro;
+  border: 2px solid lightslategrey;
+  border-radius: 20px;
+}
+.answer:hover{
+  opacity: .6;
+  cursor: pointer;
+}
+.backBtn{
+  display: block;
+  margin: auto;
+  padding:10px 20px;
+  background: white;
+  color:darkgoldenrod;
+  border: 2px solid darkgoldenrod;
+  border-radius: 25px;
+}
+/* TotalReuslt */
+#TotalResult{
+  background:darkgoldenrod;
+  color: white;
+  margin-top: 30px;
+}
+#TotalResult h2{
+  border-bottom: 1px solid white;
+}
+#TotalResult .flex{
+  width: 70%;
+  margin: auto;
+  padding: 10px;
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+
+}
+#TotalResult .fontSize{
+  font-size: 150%;
+  padding: 0 5px;
+}
+#TotalResult .accordionBtn{
+  position: relative;
+  padding: 10px 20px;
+  background: white;
+  color:darkgoldenrod;
+  border: 2px solid darkgoldenrod;
+  border-radius: 25px;
+}
+#TotalResult .accordionBtn:hover{
+  opacity: .6;
+}
+#TotalResult .accordionContent{
+  border-top: 1px solid white;
+  display: none;
+  padding: 10px;
+}
+#TotalResult .open{
+  display: block;
+}
