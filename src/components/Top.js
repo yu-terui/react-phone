@@ -1,11 +1,15 @@
 import React, { useState, useRef } from "react";
-import Slider from "react-slick";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore from "swiper/core";
+import { Navigation } from "swiper/modules";
 import questions from "../objects/questions";
 import plans from "../objects/plans";
 import planMapping from "../objects/planMapping";
 import TotalResult from "./TotalResult";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import "swiper/css";
+import "swiper/css/navigation";
+
+SwiperCore.use([Navigation]);
 
 function Top() {
   const [currentQindex, setCurrentQindex] = useState(0);
@@ -13,18 +17,27 @@ function Top() {
   const [filteredData, setFilteredData] = useState([]);
   const [planTable, setPlanTable] = useState([]);
   const [callPack, setCallPack] = useState([]);
-  const sliderRef = useRef(null);
+  const swiperRef = useRef(null);
   const currentQ = questions[currentQindex];
   //前の設問に戻る
   const goBack = () => {
+    swiperRef.current.swiper.slidePrev();
+    setCallPack([]);
+    // 最後の質問が answers に追加されているかどうかを確認
+  const isLastQuestionAnswered = answers.some(answer => answer.questionIndex === 5);
     if (currentQindex > 0) {
-      //スライダー
-      sliderRef.current.slickPrev()
       //直前の質問のインデックスを取得
-      const prevQindex = answers[answers.length - 1].questionIndex;
-      setCurrentQindex(prevQindex);
-      //直前の回答を削除
-      setAnswers(answers.slice(0, -1));
+      if (isLastQuestionAnswered) {
+        const prevQindex = answers[answers.length - 2].questionIndex;
+        setCurrentQindex(prevQindex);
+        //直前の回答を削除
+        setAnswers(answers.slice(0, -1));
+      } else {
+        const prevQindex = answers[answers.length - 1].questionIndex;
+        setCurrentQindex(prevQindex);
+        //直前の回答を削除
+        setAnswers(answers.slice(0, -1));
+      }
     }
   };
 
@@ -34,12 +47,9 @@ function Top() {
     const answer = { questionIndex: currentQindex, answerIndex: option };
     const updatedAnswers = [...answers, answer];
     setAnswers(updatedAnswers); //回答を記録
-    //スライダー
-    sliderRef.current.slickNext();
     ////// 通話定額を使うかどうか //////
     if (currentQindex === callPackQindex) {
       // 通話定額を使うかの回答を取得
-      setCallPack([]);
       const callPackage = updatedAnswers.find(
         (answer) => answer.questionIndex === 3
       );
@@ -92,7 +102,9 @@ function Top() {
       : null; //次の質問がなければnull
 
     // 次の質問がない場合、最後の回答を追加
+    // スライダーを無効に
     if (nextQindex === null) {
+      swiperRef.current.swiper.detachEvents();
       const lastQindex =
         updatedAnswers[updatedAnswers.length - 1].questionIndex;
       const selectedGiga = questions[lastQindex].options[option].replace(
@@ -141,38 +153,38 @@ function Top() {
       }
     } else {
       //nullじゃない場合
+      swiperRef.current.swiper.slideNext();
       setCurrentQindex(nextQindex);
     }
   };
-  //slider
-  const settings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrow: false,
-  };
   return (
     <div>
-      <Slider ref={sliderRef} {...settings}>
+      <Swiper
+        ref={swiperRef}
+        navigation={{ prevEl: null, nextEl: null }}
+        onSlideChange={(swiper) => {
+          setCurrentQindex(swiper.activeIndex);
+        }}
+      >
         {questions &&
           questions.map((item) => (
-            <div>
+            <SwiperSlide>
               <h2>{currentQ.question}</h2>
               {currentQ &&
                 currentQ.options.map((option, index) => (
                   <div
                     key={index}
                     className="answer"
-                    onClick={() => handleAnswerSelection(index)}
+                    onClick={() => {
+                      handleAnswerSelection(index);
+                    }}
                   >
                     {option}
                   </div>
                 ))}
-            </div>
+            </SwiperSlide>
           ))}
-      </Slider>
+      </Swiper>
       <button className="backBtn disabled" onClick={goBack}>
         前の設問に戻る
       </button>

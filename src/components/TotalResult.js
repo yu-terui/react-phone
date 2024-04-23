@@ -73,9 +73,8 @@ function TotalResult({ filteredData, planTable, callPack }) {
           </div>
           <dl className={active ? "open accordionContent" : "accordionContent"}>
             <div className="flex">
-              <dt className="fontSize">{planTable}</dt>
-              <dd>
-                <span className="fontSize">{item.price}</span>円
+              <dt>{planTable}</dt>
+              <dd>{item.price}円
               </dd>
             </div>
             <div className="callPackArea flex"></div>
