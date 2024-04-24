@@ -23,21 +23,12 @@ function Top() {
   const goBack = () => {
     swiperRef.current.swiper.slidePrev();
     setCallPack([]);
-    // 最後の質問が answers に追加されているかどうかを確認
-  const isLastQuestionAnswered = answers.some(answer => answer.questionIndex === 5);
     if (currentQindex > 0) {
       //直前の質問のインデックスを取得
-      if (isLastQuestionAnswered) {
         const prevQindex = answers[answers.length - 2].questionIndex;
         setCurrentQindex(prevQindex);
         //直前の回答を削除
         setAnswers(answers.slice(0, -1));
-      } else {
-        const prevQindex = answers[answers.length - 1].questionIndex;
-        setCurrentQindex(prevQindex);
-        //直前の回答を削除
-        setAnswers(answers.slice(0, -1));
-      }
     }
   };
 
