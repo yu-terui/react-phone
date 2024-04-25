@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper/core";
 import { Navigation } from "swiper/modules";
@@ -19,16 +19,38 @@ function Top() {
   const [callPack, setCallPack] = useState([]);
   const swiperRef = useRef(null);
   const currentQ = questions[currentQindex];
+  useEffect(() => {
+    const backBtn = document.querySelector(".backBtn");
+    if (currentQindex !==0) {
+      backBtn.classList.remove("disabled");
+    } else {
+      //ボタン非活性化
+      backBtn.classList.add("disabled");
+    }
+  }, [currentQindex]);
   //前の設問に戻る
   const goBack = () => {
-    swiperRef.current.swiper.slidePrev();
     setCallPack([]);
     if (currentQindex > 0) {
-      //直前の質問のインデックスを取得
+      //ボタン活性化
+      if (
+        currentQindex === 5 &&
+        answers.find((answer) => answer.questionIndex === 5)
+      ) {
+        //直前の質問のインデックスを取得
         const prevQindex = answers[answers.length - 2].questionIndex;
         setCurrentQindex(prevQindex);
         //直前の回答を削除
         setAnswers(answers.slice(0, -1));
+        swiperRef.current.swiper.slideTo(prevQindex);
+      } else {
+        //直前の質問のインデックスを取得
+        const prevQindex = answers[answers.length - 1].questionIndex;
+        setCurrentQindex(prevQindex);
+        //直前の回答を削除
+        setAnswers(answers.slice(0, -1));
+        swiperRef.current.swiper.slideTo(prevQindex);
+      }
     }
   };
 
@@ -176,7 +198,7 @@ function Top() {
             </SwiperSlide>
           ))}
       </Swiper>
-      <button className="backBtn disabled" onClick={goBack}>
+      <button className="backBtn" onClick={goBack}>
         前の設問に戻る
       </button>
       <TotalResult
